@@ -25,7 +25,7 @@ products.forEach((products) => {
       </div>
 
       <div class="product-quantity-container">
-        <select>
+        <select class="js-selector-value">
           <option selected value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -41,7 +41,7 @@ products.forEach((products) => {
 
       <div class="product-spacer"></div>
 
-      <div class="added-to-cart">
+      <div class="added-to-cart js-added-dynamic">
         <img src="images/icons/checkmark.png">
         Added
       </div>
@@ -60,6 +60,7 @@ const productosContainer = document.querySelector('.js-productos-dinamicos');
 productosContainer.innerHTML = productosRenderizados;
 
 const cartQuantityLive = document.querySelector('.js-cart-quantity');
+let timeoutId;
 
 
 
@@ -67,9 +68,16 @@ const cartQuantityLive = document.querySelector('.js-cart-quantity');
 document.querySelectorAll('.js-add-to-cart')
   .forEach((button) => {
     button.addEventListener('click', () => {
-      const productId = button.dataset.productId; //Obtenemos el dato a trabajar como referencia.
+      const addToCartNotify = button.parentElement.querySelector('.js-added-dynamic');  
+      addToCartNotify.classList.add('visible');
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        addToCartNotify.classList.remove('visible');
+      },2000);    
+      const {productId} = button.dataset; //Obtenemos el dato a trabajar como referencia.
       let productoDetectado; //Producto sobre el cual se trabaja.
-
+      const quantityOfProduct = button.parentElement.querySelector('.js-selector-value');  //Obtenermos el valor parent de cada boton. 
+      //Al hacer click dinamicamente obtendrá la cantidad de ese producto en especifico.
 
       cart.forEach((item) => {
 
@@ -80,23 +88,28 @@ document.querySelectorAll('.js-add-to-cart')
           }
           );
           if (productoDetectado) {
-            productoDetectado.quantity++;
+            let cantidadActual = productoDetectado.quantity; //Setemoas la cantidad que traiga de pasadas anterior.
+            productoDetectado.quantity = cantidadActual + Number(quantityOfProduct.value);  //Actualizamos con la pasada actual
+
           }
           else {
+            //Agregamos el producto al array en caso de que no exista coincidencia
             cart.push({
               id: productId,
-              quantity: 1
+              quantity: Number(quantityOfProduct.value)
             });
           }
-          let totalQuantity = 0;
-          cart.forEach((item) => {
-            totalQuantity += item.quantity;
+          
+           let totalQuantity = 0;
+           cart.forEach((item) => {
+            totalQuantity += item.quantity; // ya salimos del scope anterior, entonces aca volvemos al for each y vamos sumando lo que encontramos para hacer el total y presentarlo
           }
           );
-          cartQuantityLive.innerText = totalQuantity;
+          cartQuantityLive.innerText = totalQuantity; 
           console.log(totalQuantity);
           console.log(cart);
         });
   });
+
 
 
