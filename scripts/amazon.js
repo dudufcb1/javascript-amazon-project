@@ -46,7 +46,7 @@
         Added
       </div>
 
-      <button class="add-to-cart-button button-primary">
+      <button class="add-to-cart-button button-primary js-add-to-cart" data-product-id="${products.id}">
         Add to Cart
       </button>
     </div>
@@ -57,5 +57,35 @@
     });
 
 const productosContainer = document.querySelector('.js-productos-dinamicos');
-
 productosContainer.innerHTML = productosRenderizados;
+
+
+
+
+
+document.querySelectorAll('.js-add-to-cart')
+.forEach((button)=>{
+  button.addEventListener('click',() => {
+    const productId = button.dataset.productId; //Obtenemos el dato a trabajar como referencia.
+    let productoDetectado; //Producto sobre el cual se trabaja.
+    
+    
+  cart.forEach((item)=>{
+
+    if (productId === item.id) //Si existe el productname que viene del data set en el lugar del objeto con el mismo nombre
+    {
+     productoDetectado = item; //Producto detectado ahora es igual al item en memoria.
+    }
+  }
+  );
+  if (productoDetectado){
+    productoDetectado.quantity++;
+  }
+  else{
+      cart.push({id: productId, 
+      quantity: 1});
+    }
+    console.log(cart);
+  });
+  
+})
