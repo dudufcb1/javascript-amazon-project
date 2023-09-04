@@ -1,4 +1,4 @@
-import {cart} from '../data/cart.js';
+import {cart, addToCart} from '../data/cart.js';
 import {products} from '../data/products.js';
 let productosRenderizados = '';
 
@@ -65,31 +65,11 @@ const cartQuantityLive = document.querySelector('.js-cart-quantity');
 let timeoutId;
 
 //Funciones
-//Agregar al carrito
-const addToCart = (productId) => {
-  let productoDetectado; //Producto sobre el cual se trabaja.
-  cart.forEach((item) => {
-      if (productId === item.id) //Si existe el productname que viene del data set en el lugar del objeto con el mismo nombre
-      {
-        productoDetectado = item; //Producto detectado ahora es igual al item en memoria.
-      }
-      }
-      );
-      if (productoDetectado) {
-        productoDetectado.quantity++;
-      }
-      else {
-        cart.push({
-          id: productId,
-          quantity: 1
-        });
-      }
-}
 //Actualizar cantidad en el carrito
 const updateCartQuantity = () => {
   let totalQuantity = 0;
-  cart.forEach((item) => {
-    totalQuantity += item.quantity;
+  cart.forEach((cartItem) => {
+    totalQuantity += cartItem.quantity;
   }
   );
   cartQuantityLive.innerText = totalQuantity;
