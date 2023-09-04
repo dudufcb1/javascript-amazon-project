@@ -58,11 +58,14 @@ products.forEach((products) => {
 
 });
 
+
 const productosContainer = document.querySelector('.js-productos-dinamicos');
 productosContainer.innerHTML = productosRenderizados;
 const cartQuantityLive = document.querySelector('.js-cart-quantity');
 let timeoutId;
 
+//Funciones
+//Agregar al carrito
 const addToCart = (productId) => {
   let productoDetectado; //Producto sobre el cual se trabaja.
   cart.forEach((item) => {
@@ -82,7 +85,7 @@ const addToCart = (productId) => {
         });
       }
 }
-
+//Actualizar cantidad en el carrito
 const updateCartQuantity = () => {
   let totalQuantity = 0;
   cart.forEach((item) => {
@@ -97,6 +100,8 @@ document.querySelectorAll('.js-add-to-cart')
   .forEach((button) => {
     button.addEventListener('click', () => {
       const productId = button.dataset.productId; //Obtenemos el dato a trabajar como referencia.
+      addToCart(productId);
+      updateCartQuantity();
         });
   });
 
