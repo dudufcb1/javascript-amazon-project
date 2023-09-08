@@ -97,6 +97,16 @@ cart.forEach((cartItem) => {
         boton.addEventListener('click', () => {
             let productId = boton.dataset.productId;
             removeFromCart(productId);
+            const container = document.querySelector(
+                `.js-cart-${productId}
+                `
+            )
+            container.remove();
+            if (cart.length===0){
+                document.querySelector('.js-cart-content').innerText = 'Your cart is empty';
+                return;
+            }
+                
         })
     });
     
