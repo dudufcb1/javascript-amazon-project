@@ -1,6 +1,10 @@
 import {cart, addToCart} from '../data/cart.js';
 import {products} from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
+import { updateCartQuantity } from './utils/totalitems.js';
+
+//Actualizar cantidad en el carrito
+
 let productosRenderizados = '';
 
 products.forEach((products) => {
@@ -65,16 +69,7 @@ productosContainer.innerHTML = productosRenderizados;
 const cartQuantityLive = document.querySelector('.js-cart-quantity');
 let timeoutId;
 
-//Funciones
-//Actualizar cantidad en el carrito
-const updateCartQuantity = () => {
-  let totalQuantity = 0;
-  cart.forEach((cartItem) => {
-    totalQuantity += cartItem.quantity;
-  }
-  );
-  cartQuantityLive.innerText = totalQuantity;
-}
+
 
 //Agregar al carrito (al array)
 document.querySelectorAll('.js-add-to-cart')
@@ -82,9 +77,9 @@ document.querySelectorAll('.js-add-to-cart')
     button.addEventListener('click', () => {
       const productId = button.dataset.productId; //Obtenemos el dato a trabajar como referencia.
       addToCart(productId);
-      updateCartQuantity();
-        });
+      updateCartQuantity(cartQuantityLive);  
+              });
   });
 
-
+  updateCartQuantity(cartQuantityLive);
 

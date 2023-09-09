@@ -1,8 +1,8 @@
 import {cart, removeFromCart} from '../data/cart.js';
 import {products} from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
+import { updateCartQuantity } from './utils/totalitems.js';
 let renderHtmlCart = ''; // Creo variable por fuera para ACUMULAR las iteraciones.
-
 
 //Funcion general para crear el HTML
 cart.forEach((cartItem) => {
@@ -43,9 +43,11 @@ cart.forEach((cartItem) => {
             <span>
             Quantity: <span class="quantity-label">${cartItem.quantity}</span>
             </span>
-            <span class="update-quantity-link link-primary">
+            <span class="update-quantity-link link-primary js-update-product" data-product-id="${cartItem.productId}">
             Update
             </span>
+            <input class="quantity-input">
+            <span class="save-quantity-link link-primary">Save</span>
             <span class="delete-quantity-link link-primary js-delete-product" data-product-id="${cartItem.productId}">
             Delete
             </span>
@@ -105,6 +107,7 @@ cart.forEach((cartItem) => {
         boton.addEventListener('click', () => {
             let productId = boton.dataset.productId;
             removeFromCart(productId);
+            updateCartQuantity(elemento, 'items');
             const container = document.querySelector(
                 `.js-cart-${productId}
                 `
@@ -118,3 +121,16 @@ cart.forEach((cartItem) => {
         })
     });
     
+    const elemento = document.querySelector('.js-checkout-item-counter');
+
+    updateCartQuantity(elemento, 'items');
+    
+
+    const botonesEditar = document.querySelectorAll('.js-update-product');
+    botonesEditar.forEach((botonEditar)=>{
+
+        botonEditar.addEventListener('click', ()=> {
+            console.log('Funciono :)');
+        })
+
+    })

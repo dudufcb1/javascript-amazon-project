@@ -13,7 +13,7 @@ if(cart.length===0){
 export const addToCart = (productId) => {
     let productoDetectado; //Producto sobre el cual se trabaja.
     cart.forEach((cartItem) => {
-        if (productId === cartItem.id) //Si existe el productname que viene del data set en el lugar del objeto con el mismo nombre
+        if (productId === cartItem.productId) //Si existe el productname que viene del data set en el lugar del objeto con el mismo nombre
         {
           productoDetectado = cartItem; //Producto detectado ahora es igual al item en memoria.
         }
