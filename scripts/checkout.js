@@ -2,17 +2,25 @@ import {cart, removeFromCart} from '../data/cart.js';
 import {products} from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
 let renderHtmlCart = ''; // Creo variable por fuera para ACUMULAR las iteraciones.
+
+
 //Funcion general para crear el HTML
 cart.forEach((cartItem) => {
-    const productInfo = cartItem.productId; //Obtenemos el ID a trabajar.
-    let matchingProduct;
+    const productInfo = cartItem.productId; //Obtenemos el ID a trabajar y lo asignamos a productinfo.
+    console.log('Este valor que?', productInfo)
     
+    let matchingProduct; //Declaramos la variable que nos servirá para almacenar el producto matcheado en cada iteración
+    
+    console.log("productInfo:", productInfo);
+
     products.forEach((product) => {
+        console.log("product.id:", product.id);
         if (productInfo === product.id){
             matchingProduct = product;
+            console.log('Matching Product:', matchingProduct);
         }
-        
     });
+    
         
     let cartItemHtml = 
     `
@@ -104,7 +112,7 @@ cart.forEach((cartItem) => {
             container.remove();
             if (cart.length===0){
                 document.querySelector('.js-cart-content').innerText = 'Your cart is empty';
-                return;
+                console.log(cart);
             }
                 
         })

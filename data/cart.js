@@ -1,8 +1,13 @@
-export let cart = [
+export let cart = JSON.parse(localStorage.getItem('cart'));
+
+if(cart.length===0){ 
+    cart = [
     {productId:'a93a101d-79ef-4cf3-a6cf-6dbe532a1b4a',quantity:1},
     {productId:'8b5a2ee1-6055-422a-a666-b34ba28b76d4',quantity:3},
     {productId:'19c6a64a-5463-4d45-9af8-e41140a4100c',quantity:2},
 ];
+}
+
 //Funciones
 //Agregar al carrito
 export const addToCart = (productId) => {
@@ -19,10 +24,12 @@ export const addToCart = (productId) => {
         }
         else {
           cart.push({
-            id: productId,
+            productId: productId,
             quantity: 1
           });
         }
+        saveToStorage();
+        console.log(cart);
   }
 
 export const removeFromCart = (productId) => {
@@ -35,6 +42,9 @@ export const removeFromCart = (productId) => {
         }
     });
     cart = newCart;
-    console.log(cart);
+    saveToStorage();    
     }
     
+const saveToStorage = () => {
+  localStorage.setItem('cart', JSON.stringify(cart));
+}
