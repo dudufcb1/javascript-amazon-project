@@ -48,3 +48,21 @@ export const removeFromCart = (productId) => {
 const saveToStorage = () => {
   localStorage.setItem('cart', JSON.stringify(cart));
 }
+
+//Agregar al carrito
+export const updateCart = (productId, newQuantity) => {
+  let productoDetectado; //Producto sobre el cual se trabaja.
+  cart.forEach((cartItem) => {
+      if (productId === cartItem.productId) //Si existe el productname que viene del data set en el lugar del objeto con el mismo nombre
+      {
+        productoDetectado = cartItem; //Producto detectado ahora es igual al item en memoria.
+      }
+      }
+      );
+      if (productoDetectado) {
+        productoDetectado.quantity = newQuantity;
+      }
+      saveToStorage();
+      
+     
+}

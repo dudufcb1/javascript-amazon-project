@@ -1,23 +1,22 @@
-import {cart, removeFromCart} from '../data/cart.js';
+import {cart, removeFromCart, updateCart} from '../data/cart.js';
 import {products} from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
-import { updateCartQuantity } from './utils/totalitems.js';
+import { updateCartQuantity, updateGridItems } from './utils/totalitems.js';
 let renderHtmlCart = ''; // Creo variable por fuera para ACUMULAR las iteraciones.
 
 //Funcion general para crear el HTML
 cart.forEach((cartItem) => {
     const productInfo = cartItem.productId; //Obtenemos el ID a trabajar y lo asignamos a productinfo.
-    console.log('Este valor que?', productInfo)
+    
     
     let matchingProduct; //Declaramos la variable que nos servirá para almacenar el producto matcheado en cada iteración
     
-    console.log("productInfo:", productInfo);
+
 
     products.forEach((product) => {
-        console.log("product.id:", product.id);
-        if (productInfo === product.id){
+            if (productInfo === product.id){
             matchingProduct = product;
-            console.log('Matching Product:', matchingProduct);
+    
         }
     });
     
@@ -41,13 +40,13 @@ cart.forEach((cartItem) => {
         </div>
         <div class="product-quantity">
             <span>
-            Quantity: <span class="quantity-label">${cartItem.quantity}</span>
+            Quantity: <span class="quantity-label js-quantity-grid-${cartItem.productId}">${cartItem.quantity}</span>
             </span>
-            <span class="update-quantity-link link-primary js-update-product" data-product-id="${cartItem.productId}">
+            <span class="update-quantity-link link-primary js-update-product js-class-update-${cartItem.productId}" data-product-id="${cartItem.productId}">
             Update
             </span>
-            <input class="quantity-input">
-            <span class="save-quantity-link link-primary">Save</span>
+            <input class="quantity-input update-input update-input-onload-${cartItem.productId} hidden js-input-quantity" data-product-id="${cartItem.productId}">
+            <span class="save-quantity-link link-primary save-label save-label-onload-${cartItem.productId} hidden" data-product-id="${cartItem.productId}">Save</span>
             <span class="delete-quantity-link link-primary js-delete-product" data-product-id="${cartItem.productId}">
             Delete
             </span>
@@ -120,17 +119,77 @@ cart.forEach((cartItem) => {
                 
         })
     });
-    
+    const estadoInicial = {};
     const elemento = document.querySelector('.js-checkout-item-counter');
-
     updateCartQuantity(elemento, 'items');
     
-
+    
+    let botonEditar;
     const botonesEditar = document.querySelectorAll('.js-update-product');
+    const updateLink = document.querySelectorAll('.save-label');
     botonesEditar.forEach((botonEditar)=>{
-
         botonEditar.addEventListener('click', ()=> {
-            console.log('Funciono :)');
+        let productId = botonEditar.dataset.productId; // Simplemente obtengo el ID a trabajar.
+        let readyToShow = document.querySelector(`.update-input-onload-${productId}`);
+        let saveLabel = document.querySelector(`.save-label-onload-${productId}`);
+        botonEditar.classList.add('hidden');
+        readyToShow.classList.remove('hidden');         
+        saveLabel.classList.remove('hidden');   
+        
         })
+        
 
-    })
+    });
+    
+    
+    updateLink.forEach((botonGuardar) => {
+        let productId = botonGuardar.dataset.productId; // Simplemente obtengo el ID a trabajar.
+        let readyToShow = document.querySelector(`.update-input-onload-${productId}`);
+        let saveLabel = document.querySelector(`.save-label-onload-${productId}`);
+        let updateButton = document.querySelector(`.js-class-update-${productId}`);
+        botonGuardar.addEventListener('click', () => {
+            let input = document.querySelector(`.update-input-onload-${productId}`);
+            let newQuantity = Number(input.value);       
+            if(newQuantity >0 && newQuantity < 1000){
+            updateCart(productId, newQuantity);
+            updateButton.classList.remove('hidden');
+            readyToShow.classList.add('hidden');         
+            saveLabel.classList.add('hidden');           
+            updateGridItems(productId, newQuantity);
+            updateCartQuantity(elemento, 'items');
+            }
+            else{
+                alert('Add a real quantity');
+            }
+           
+        });
+    });
+
+    let inputQuantity = document.querySelectorAll('.js-input-quantity');
+    inputQuantity.forEach((inputGuardar) => {
+        let productId = inputGuardar.dataset.productId; // Simplemente obtengo el ID a trabajar.
+        let readyToShow = document.querySelector(`.update-input-onload-${productId}`);
+        let saveLabel = document.querySelector(`.save-label-onload-${productId}`);
+        let updateButton = document.querySelector(`.js-class-update-${productId}`);
+         inputGuardar.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { // Cambiado de e.code a e.key
+                e.preventDefault(); // Esto evitará que se procese el evento "Enter" por defecto (como enviar un formulario).
+                
+                let input = document.querySelector(`.update-input-onload-${productId}`);
+                let newQuantity = Number(input.value);
+                
+                if (newQuantity > 0 && newQuantity < 1000) {
+                    updateCart(productId, newQuantity);
+                    updateButton.classList.remove('hidden');
+                    readyToShow.classList.add('hidden');
+                    saveLabel.classList.add('hidden');
+                    updateGridItems(productId, newQuantity);
+                    updateCartQuantity(elemento, 'items');
+                } else {
+                    alert('Agrega una cantidad válida');
+                }
+            }
+        });
+        
+    });
+    

@@ -10,3 +10,8 @@ export const updateCartQuantity = (element, text) => {
           element.innerText = totalQuantity;
         }
       } 
+
+export const updateGridItems = (productId, newValue) => {
+  let updatedSpan = document.querySelector(`.js-quantity-grid-${productId}`);
+  updatedSpan.innerText = newValue;
+}

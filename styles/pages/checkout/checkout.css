@@ -1,3 +1,15 @@
+.update-input {
+  width: 30px;
+}
+.hidden
+{
+  display: none;
+}
+.update-input-onclick
+{
+  display: block;
+}
+
 .main {
   max-width: 1100px;
   padding-left: 30px;
